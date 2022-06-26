@@ -9,8 +9,13 @@ export default class Camera {
         this.scene = this.exp.scene
         this.cvs = this.exp.cvs
 
+        this.gui = this.exp.gui
+        this.guiFolder = null
+
         this.setInstance()
         this.setControls()
+
+        this.setupDebug()
     }
 
     resize() {
@@ -19,17 +24,27 @@ export default class Camera {
     }
 
     setControls() {
-        this.ctls = new OrbitControls(this.instance, this.cvs)
-        this.ctls.enableDamping = true
+        this.ctls = new OrbitControls( this.instance, this.cvs )
+        this.ctls.enabled = false
+        // this.ctls.enableDamping = true
+    }
+
+    setupDebug() {
+        this.guiFolder = this.gui.addFolder( 'Camera' )
+        this.guiFolder.add( this.instance.position, 'x' )
+        this.guiFolder.add( this.instance.position, 'y' )
+        this.guiFolder.add( this.instance.position, 'z' )
     }
 
     setInstance() {
         this.instance = new PerspectiveCamera( 5, this.sizes.width / this.sizes.height, 0.1, 100 )
-        this.instance.position.set( -4, 2, 15 )
+        this.instance.position.set( 0, 0, 16 )
         this.scene.add( this.instance )
     }
 
     update() {
-        this.ctls.update()
+        // this.ctls.update()
+        this.instance.position.y = -window.scrollY / this.exp.sizes.height * this.sizes.objsDist
+        // if ( this.guiFolder ) this.guiFolder.controllers.forEach( ctl => ctl.updateDisplay() )
     }
 }
