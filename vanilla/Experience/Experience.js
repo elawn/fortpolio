@@ -7,6 +7,8 @@ import World from './World/World'
 import Scroller from './Utils/Scroller'
 import * as dat from 'lil-gui'
 import { textureLoader } from './Utils/Loaders'
+import Cursor from './Utils/Cursor'
+import Stats from 'three/examples/jsm/libs/stats.module'
 
 let instance = null
 
@@ -24,6 +26,9 @@ export default class Experience {
             .add( this.debugObj, 'matcap', Array( 9 ).fill( 0 ).map( ( _, idx ) => idx + 1 ) )
             .onChange( value => this.updateMatcaps( value ) )
         this.gui.close()
+        this.stats = new Stats()
+        this.stats.showPanel(0)
+        document.body.appendChild(this.stats.dom)
 
         // setup
         this.cvs = cvs
@@ -31,8 +36,9 @@ export default class Experience {
         this.time = new Time()
         this.scroller = new Scroller()
         this.scene = new Scene()
-        this.cam = new Camera
+        this.cam = new Camera()
         this.renderer = new Renderer()
+        this.cursor = new Cursor()
         this.world = new World()
 
         // disable orbitcontrols on cmd down
@@ -56,8 +62,13 @@ export default class Experience {
     }
 
     update() {
+        this.stats.begin()
+
         this.cam.update()
+        this.cursor.update()
         this.renderer.update()
+
+        this.stats.end()
     }
 
     updateMatcaps( newVal ) {
