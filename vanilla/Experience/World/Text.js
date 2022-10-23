@@ -1,4 +1,10 @@
-import { MeshBasicMaterial, MeshMatcapMaterial } from 'three'
+import {
+    MeshLambertMaterial,
+    MeshMatcapMaterial,
+    RepeatWrapping,
+    SpotLight,
+    SpotLightHelper, Vector3
+} from 'three'
 import Experience from '../Experience'
 import { textureLoader, gltfLoader } from '../Utils/Loaders'
 import { gsap } from 'gsap'
@@ -17,11 +23,15 @@ export default class Text {
         this.enterStarted = false
         this.textMat = new MeshMatcapMaterial( {
             matcap: fontTexture,
-            transparent: true
+            transparent: true,
+            opacity: 0
         } )
+
         if ( this.links.length ) {
+            this.hoverMat = new MeshLambertMaterial( { color: 0xffffff } )
             this.linksMat = this.textMat.clone()
             this.linksMat.color.set( '#e84343' )
+            this.linksMat.opacity = 0
         }
 
         gltfLoader.load( path, gltf => this.onLoad( gltf ) )
@@ -29,9 +39,8 @@ export default class Text {
 
     onLoad( gltf ) {
         this.group = gltf.scene
-        this.group.children.filter(child => !child.name.includes('linkbox')).forEach( child => {
+        this.group.children.filter( child => !child.name.includes( 'linkbox' ) ).forEach( child => {
             child.material = this.textMat
-            // child.material.opacity = 0
             child.position.y = Math.random() * -0.85 - 1
         } )
         this.group.scale.set( 0.1, 0.1, 0.1 )
@@ -49,7 +58,10 @@ export default class Text {
     buildLinks() {
         for ( const link of this.links ) {
             const linkTexture = textureLoader.load( `/textures/gifs/tbx.gif` ) // update when others are done
-            link.hoverMat = new MeshBasicMaterial( { map: linkTexture } )
+            linkTexture.wrapS = RepeatWrapping
+            linkTexture.wrapT = RepeatWrapping
+            linkTexture.center.set( 0.5, 0.5 )
+            linkTexture.repeat.set( 2, 2 )
 
             link.children = this.group.children.filter( child => child.name.startsWith( link.key ) )
             link.children.forEach( child => {
@@ -58,6 +70,35 @@ export default class Text {
                 if ( child.name.includes( 'linkbox' ) ) {
                     child.visible = false
                     this.cursor.objects.push( child )
+
+                    const linkLight = new SpotLight(
+                        0xffffff,
+                        10,
+                        5,
+                        0.14,
+                        0,
+                        0
+                    )
+                    linkLight.castShadow = true
+                    linkLight.shadow.mapSize.width = 1024
+                    linkLight.shadow.mapSize.height = 1024
+                    linkLight.shadow.camera.near = 0.1
+                    linkLight.shadow.camera.far = 10
+                    linkLight.map = linkTexture
+                    linkLight.target = child
+
+                    const linkWorldPos = child.getWorldPosition( new Vector3() )
+
+                    linkLight.position.set( linkWorldPos.x, linkWorldPos.y, 4 )
+
+                    this.scene.add(linkLight)
+
+                    const helper = new SpotLightHelper( linkLight )
+
+                    this.scene.add( helper )
+                } else {
+                    child.receiveShadow = true
+                    child.castShadow = true
                 }
             } )
         }
@@ -84,7 +125,8 @@ export default class Text {
 
     handleMouseEnter( link ) {
         for ( const child of link.children ) {
-            child.material = link.hoverMat
+            child.material = this.hoverMat
+            child.material.needsUpdate = true
         }
     }
 

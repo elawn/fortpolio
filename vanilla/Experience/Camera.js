@@ -37,7 +37,7 @@ export default class Camera {
     }
 
     setInstance() {
-        this.instance = new PerspectiveCamera( 5, this.sizes.width / this.sizes.height, 0.1, 100 )
+        this.instance = new PerspectiveCamera( 5, this.sizes.width / this.sizes.height, 0.1, 1000 )
         this.instance.position.set( 0, 0, 16 )
         this.scene.add( this.instance )
     }
@@ -45,6 +45,6 @@ export default class Camera {
     update() {
         // this.ctls.update()
         this.instance.position.y = -window.scrollY / this.exp.sizes.height * this.sizes.objsDist
-        // if ( this.guiFolder ) this.guiFolder.controllers.forEach( ctl => ctl.updateDisplay() )
+        if ( this.guiFolder ) this.guiFolder.controllers.forEach( ctl => ctl.updateDisplay() )
     }
 }

@@ -1,5 +1,5 @@
 import Experience from './Experience'
-import { CineonToneMapping, PCFSoftShadowMap, sRGBEncoding, WebGLRenderer } from 'three'
+import { ACESFilmicToneMapping, PCFSoftShadowMap, sRGBEncoding, WebGLRenderer } from 'three'
 
 export default class Renderer {
     constructor() {
@@ -24,14 +24,13 @@ export default class Renderer {
         })
         this.instance.physicallyCorrectLights = true
         this.instance.outputEncoding = sRGBEncoding
-        this.instance.toneMapping = CineonToneMapping
+        this.instance.toneMapping = ACESFilmicToneMapping
         this.instance.toneMappingExposure = 1.75
         this.instance.shadowMap.enabled = true
         this.instance.shadowMap.type = PCFSoftShadowMap
         this.instance.setSize(this.sizes.width, this.sizes.height)
         this.instance.setPixelRatio(this.sizes.pixelRatio)
         this.instance.setClearColor( '#0080ff' )
-        // this.instance.setClearColor( '#ff2222' )
     }
 
     update() {
