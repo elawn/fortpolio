@@ -14,10 +14,17 @@ section {
   width: 100%;
 }
 
+video {
+  position: fixed;
+  z-index: 1;
+  top:0;
+}
+
 #cvs
 {
   position: fixed;
   top: 0;
   left: 0;
   outline: none;
+  z-index: 2;
 }

@@ -7,6 +7,7 @@ export default class World {
         this.exp = new Experience()
         this.scene = this.exp.scene
         this.gui = this.exp.gui
+        this.updates = []
 
         this.text0 = new Text( '/objects/text1.glb', 0 )
         this.text1 = new Text( '/objects/text2.glb', 1, [
@@ -58,5 +59,11 @@ export default class World {
 
         this.text1.group.position.x = 0.1
         this.text2.group.position.x = -0.1
+    }
+
+    update() {
+        for (const update of this.updates) {
+            update()
+        }
     }
 }

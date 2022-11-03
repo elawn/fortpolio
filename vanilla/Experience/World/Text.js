@@ -3,7 +3,7 @@ import {
     MeshMatcapMaterial,
     RepeatWrapping,
     SpotLight,
-    SpotLightHelper, Vector3
+    SpotLightHelper, Vector3, VideoTexture
 } from 'three'
 import Experience from '../Experience'
 import { textureLoader, gltfLoader } from '../Utils/Loaders'
@@ -58,11 +58,24 @@ export default class Text {
 
     buildLinks() {
         for ( const link of this.links ) {
-            const linkTexture = textureLoader.load( `/textures/gifs/disturb.jpg` ) // update when others are done
+            // const linkTexture = textureLoader.load( `/textures/gifs/disturb.jpg` ) // update when others are done
+
+            const vidEl = document.createElement( 'video' )
+            vidEl.src = `/textures/videos/tbx.mp4`
+            vidEl.muted = true
+            vidEl.loop = true
+            vidEl.playsInline = true
+            vidEl.autoplay = true
+            document.body.appendChild( vidEl )
+            const linkTexture = new VideoTexture( vidEl )
+
             linkTexture.wrapS = RepeatWrapping
             linkTexture.wrapT = RepeatWrapping
-            linkTexture.center.set( 0.5, 0.5 )
-            linkTexture.repeat.set( 2, 2 )
+            linkTexture.anisotropy = this.exp.renderer.instance.capabilities.getMaxAnisotropy()
+
+            this.exp.world.updates.push(() => {
+                linkTexture.update()
+            })
 
             link.children = this.group.children.filter( child => child.name.startsWith( link.key ) )
             link.children.forEach( child => {

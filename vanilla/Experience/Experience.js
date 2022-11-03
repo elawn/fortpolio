@@ -66,6 +66,7 @@ export default class Experience {
 
         this.cam.update()
         this.cursor.update()
+        this.world.update()
         this.renderer.update()
 
         this.stats.end()
