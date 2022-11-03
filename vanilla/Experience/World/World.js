@@ -16,21 +16,24 @@ export default class World {
                 children: [],
                 box: new Box3(),
                 boxObj: new Object3D(),
-                url: 'https://winners.webbyawards.com/2018/websites-and-mobile-sites/general-websites-and-mobile-sites/corporate-communications/46720/starbucks-channel'
+                url: 'https://winners.webbyawards.com/2018/websites-and-mobile-sites/general-websites-and-mobile-sites/corporate-communications/46720/starbucks-channel',
+                hoverColor: '#eeeeee'
             },
             {
                 key: 'adbe',
                 children: [],
                 box: new Box3(),
                 boxObj: new Object3D(),
-                url: 'https://winners.webbyawards.com/2019/apps-and-software/mobile-ott-app-features/best-visual-design-aesthetic/80614/adobe-mobile-maturity'
+                url: 'https://winners.webbyawards.com/2019/apps-and-software/mobile-ott-app-features/best-visual-design-aesthetic/80614/adobe-mobile-maturity',
+                hoverColor: '#999999'
             },
             {
                 key: 'hegg',
                 children: [],
                 box: new Box3(),
                 boxObj: new Object3D(),
-                url: 'https://www.cssdesignawards.com/sites/happy-egg-co/36835/'
+                url: 'https://www.cssdesignawards.com/sites/happy-egg-co/36835/',
+                hoverColor: '#dedede'
             }
         ] )
         this.text2 = new Text( '/objects/text3.glb', 2, [
@@ -39,7 +42,8 @@ export default class World {
                 children: [],
                 box: new Box3(),
                 boxObj: new Object3D(),
-                url: 'https://thinkingbox.com/'
+                url: 'https://thinkingbox.com/',
+                hoverColor: '#ffffff'
             }
         ] )
         this.text3 = new Text( '/objects/text4.glb', 3, [
@@ -48,7 +52,8 @@ export default class World {
                 children: [],
                 box: new Box3(),
                 boxObj: new Object3D(),
-                url: 'mailto:elawn@me.com'
+                url: 'mailto:elawn@me.com',
+                hoverColor: '#cccccc'
             }
         ] )
         DefaultLoadingManager.onLoad = () => this.setupTl()

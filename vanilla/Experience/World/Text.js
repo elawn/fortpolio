@@ -10,7 +10,7 @@ import { textureLoader, gltfLoader } from '../Utils/Loaders'
 import { gsap } from 'gsap'
 
 const FONT_TEXTURE = textureLoader.load( '/textures/matcaps/5.png' )
-const LINK_LIGHT_INTENSITY = 4
+const LINK_LIGHT_INTENSITY = 5
 
 export default class Text {
     constructor( path, id, links = [] ) {
@@ -29,7 +29,7 @@ export default class Text {
         } )
 
         if ( this.links.length ) {
-            this.hoverMat = new MeshLambertMaterial( { color: 0xffffff } )
+            this.hoverMat = new MeshLambertMaterial( { color: 0xdedede } )
             this.linksMat = this.textMat.clone()
             this.linksMat.color.set( '#e84343' )
             this.linksMat.opacity = 0
@@ -58,10 +58,8 @@ export default class Text {
 
     buildLinks() {
         for ( const link of this.links ) {
-            // const linkTexture = textureLoader.load( `/textures/gifs/disturb.jpg` ) // update when others are done
-
             const vidEl = document.createElement( 'video' )
-            vidEl.src = `/textures/videos/tbx.mp4`
+            vidEl.src = `/textures/videos/${ link.key }.mp4`
             vidEl.muted = true
             vidEl.loop = true
             vidEl.playsInline = true
@@ -73,9 +71,9 @@ export default class Text {
             linkTexture.wrapT = RepeatWrapping
             linkTexture.anisotropy = this.exp.renderer.instance.capabilities.getMaxAnisotropy()
 
-            this.exp.world.updates.push(() => {
+            this.exp.world.updates.push( () => {
                 linkTexture.update()
-            })
+            } )
 
             link.children = this.group.children.filter( child => child.name.startsWith( link.key ) )
             link.children.forEach( child => {
@@ -88,10 +86,10 @@ export default class Text {
                     const linkLight = new SpotLight(
                         0xffffff,
                         0,
-                        5,
+                        5.5,
                         0.14,
                         0,
-                        0
+                        0.5
                     )
                     linkLight.castShadow = true
                     linkLight.shadow.mapSize.width = 1024
@@ -109,9 +107,9 @@ export default class Text {
 
                     link.light = linkLight
 
-                    const helper = new SpotLightHelper( linkLight )
+                    // const helper = new SpotLightHelper( linkLight )
 
-                    this.scene.add( helper )
+                    // this.scene.add( helper )
                 } else {
                     child.receiveShadow = true
                     child.castShadow = true
@@ -148,6 +146,7 @@ export default class Text {
             child.material.needsUpdate = true
         }
         link.light.intensity = LINK_LIGHT_INTENSITY
+        this.hoverMat.color.set( link.hoverColor )
     }
 
     handleMouseLeave( link ) {
@@ -159,7 +158,7 @@ export default class Text {
 
     handleClick( link ) {
         if ( link === undefined ) return
-        console.log( link.url )
+        window.open( link.url, '_blank' )
     }
 
     enter( delay = 0 ) {
