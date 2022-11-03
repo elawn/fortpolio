@@ -9,7 +9,8 @@ import Experience from '../Experience'
 import { textureLoader, gltfLoader } from '../Utils/Loaders'
 import { gsap } from 'gsap'
 
-const fontTexture = textureLoader.load( '/textures/matcaps/5.png' )
+const FONT_TEXTURE = textureLoader.load( '/textures/matcaps/5.png' )
+const LINK_LIGHT_INTENSITY = 4
 
 export default class Text {
     constructor( path, id, links = [] ) {
@@ -22,7 +23,7 @@ export default class Text {
         this.links = links
         this.enterStarted = false
         this.textMat = new MeshMatcapMaterial( {
-            matcap: fontTexture,
+            matcap: FONT_TEXTURE,
             transparent: true,
             opacity: 0
         } )
@@ -57,7 +58,7 @@ export default class Text {
 
     buildLinks() {
         for ( const link of this.links ) {
-            const linkTexture = textureLoader.load( `/textures/gifs/tbx.gif` ) // update when others are done
+            const linkTexture = textureLoader.load( `/textures/gifs/disturb.jpg` ) // update when others are done
             linkTexture.wrapS = RepeatWrapping
             linkTexture.wrapT = RepeatWrapping
             linkTexture.center.set( 0.5, 0.5 )
@@ -73,7 +74,7 @@ export default class Text {
 
                     const linkLight = new SpotLight(
                         0xffffff,
-                        10,
+                        0,
                         5,
                         0.14,
                         0,
@@ -92,6 +93,8 @@ export default class Text {
                     linkLight.position.set( linkWorldPos.x, linkWorldPos.y, 4 )
 
                     this.scene.add(linkLight)
+
+                    link.light = linkLight
 
                     const helper = new SpotLightHelper( linkLight )
 
@@ -127,12 +130,14 @@ export default class Text {
         for ( const child of link.children ) {
             child.material = this.hoverMat
             child.material.needsUpdate = true
+            link.light.intensity = LINK_LIGHT_INTENSITY
         }
     }
 
     handleMouseLeave( link ) {
         for ( const child of link.children ) {
             child.material = this.linksMat
+            link.light.intensity = 0
         }
     }
 
