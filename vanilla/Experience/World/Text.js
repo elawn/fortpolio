@@ -92,7 +92,7 @@ export default class Text {
 
                     linkLight.position.set( linkWorldPos.x, linkWorldPos.y, 4 )
 
-                    this.scene.add(linkLight)
+                    this.scene.add( linkLight )
 
                     link.light = linkLight
 
@@ -116,6 +116,9 @@ export default class Text {
                     this.handleMouseLeave( link )
                 }
             }
+
+            this.exp.cvs.style.cursor = this.cursor.intersects[ 0 ]?.object.name.includes( '_linkbox' ) ?
+                'pointer' : 'auto'
         } )
         window.addEventListener( 'click', () => {
             if ( this.cursor.intersects.length ) {
@@ -130,15 +133,15 @@ export default class Text {
         for ( const child of link.children ) {
             child.material = this.hoverMat
             child.material.needsUpdate = true
-            link.light.intensity = LINK_LIGHT_INTENSITY
         }
+        link.light.intensity = LINK_LIGHT_INTENSITY
     }
 
     handleMouseLeave( link ) {
         for ( const child of link.children ) {
             child.material = this.linksMat
-            link.light.intensity = 0
         }
+        link.light.intensity = 0
     }
 
     handleClick( link ) {
