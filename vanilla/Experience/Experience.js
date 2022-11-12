@@ -1,6 +1,6 @@
 import Sizes from './Utils/Sizes'
 import Time from './Utils/Time'
-import { Mesh, MeshMatcapMaterial, Scene } from 'three'
+import { DefaultLoadingManager, Mesh, MeshMatcapMaterial, Scene } from 'three'
 import Camera from './Camera'
 import Renderer from './Renderer'
 import World from './World/World'
@@ -40,6 +40,7 @@ export default class Experience {
         this.renderer = new Renderer()
         this.cursor = new Cursor()
         this.world = new World()
+        this.loaded = false
 
         // disable orbitcontrols on cmd down
         window.addEventListener( 'keydown', ( { key } ) => {
@@ -54,9 +55,18 @@ export default class Experience {
 
         // tick event
         this.time.on( 'tick', () => this.update() )
+
+        DefaultLoadingManager.onLoad = () => this.onLoad()
+    }
+
+    onLoad() {
+        this.loaded = true
+
+        this.world.onLoad()
     }
 
     resize() {
+        this.world.setFov()
         this.cam.resize()
         this.renderer.resize()
     }

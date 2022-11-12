@@ -6,7 +6,11 @@ export default class World {
     constructor() {
         this.exp = new Experience()
         this.scene = this.exp.scene
+        this.cam = this.exp.cam.instance
+        this.sizes = this.exp.sizes
         this.gui = this.exp.gui
+        this.widest = null
+        this.fovDist = null
         this.updates = []
 
         this.text0 = new Text( '/objects/text1.glb', 0 )
@@ -56,7 +60,19 @@ export default class World {
                 hoverColor: '#cccccc'
             }
         ] )
-        DefaultLoadingManager.onLoad = () => this.setupTl()
+    }
+
+    onLoad() {
+        this.widest = [
+            this.text0.size.x,
+            this.text1.size.x,
+            this.text2.size.x,
+            this.text3.size.x,
+        ].reduce( ( prev, curr ) => curr > prev ? curr : prev, 0 )
+        this.fovDist = this.cam.position.z - this.text0.size.z / 2
+
+        this.setupTl()
+        this.setFov()
     }
 
     setupTl() {
@@ -66,8 +82,15 @@ export default class World {
         this.text2.group.position.x = -0.1
     }
 
+    setFov() {
+        if ( !this.exp.loaded ) return
+        // credit to [WestLangley](https://stackoverflow.com/a/14614736) for the next bit
+        const x = ( (this.widest + 0.35) / ( this.sizes.width / this.sizes.height ) ) / ( 2 * this.fovDist )
+        this.cam.fov = 2 * Math.atan( x ) * ( 180 / Math.PI )
+    }
+
     update() {
-        for (const update of this.updates) {
+        for ( const update of this.updates ) {
             update()
         }
     }

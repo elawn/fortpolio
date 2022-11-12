@@ -1,9 +1,10 @@
 import {
+    Box3, BoxGeometry, Mesh,
     MeshLambertMaterial,
     MeshMatcapMaterial,
     RepeatWrapping,
     SpotLight,
-    SpotLightHelper, Vector3, VideoTexture
+    Vector3, VideoTexture
 } from 'three'
 import Experience from '../Experience'
 import { textureLoader, gltfLoader } from '../Utils/Loaders'
@@ -22,6 +23,7 @@ export default class Text {
         this.id = id
         this.links = links
         this.enterStarted = false
+        this.size = new Vector3()
         this.textMat = new MeshMatcapMaterial( {
             matcap: FONT_TEXTURE,
             transparent: true,
@@ -47,6 +49,10 @@ export default class Text {
         this.group.scale.set( 0.1, 0.1, 0.1 )
         this.group.rotation.y = Math.PI * 0.5
         this.group.position.y = this.id * -this.exp.sizes.objsDist
+
+        const box = new Box3().setFromObject(this.group)
+        box.getSize(this.size)
+
         this.scene.add( this.group )
 
         this.scroller.on( 'newSect', ( id ) => {
