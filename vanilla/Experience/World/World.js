@@ -73,6 +73,7 @@ export default class World {
 
         this.setupTl()
         this.setFov()
+        this.cam.updateProjectionMatrix()
     }
 
     setupTl() {
