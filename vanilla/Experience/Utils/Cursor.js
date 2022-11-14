@@ -11,13 +11,17 @@ export default class Cursor extends EventEmitter {
         this.objects = []
         this.intersects = []
 
-        this.addListener()
+        this.addListeners()
     }
 
-    addListener() {
+    addListeners() {
         window.addEventListener( 'mousemove', ( { clientX, clientY } ) => {
             this.cursor.x = clientX / this.exp.sizes.width * 2 - 1
             this.cursor.y = -( clientY / this.exp.sizes.height ) * 2 + 1
+        } )
+
+        window.addEventListener( 'click', () => {
+            if ( this.intersects.length ) this.trigger( 'click', [this.intersects] )
         } )
     }
 
@@ -26,7 +30,9 @@ export default class Cursor extends EventEmitter {
         const intersects = this.raycaster.intersectObjects( this.objects )
         if ( intersects.length !== this.intersects.length ) {
             this.intersects = intersects
-            this.trigger( 'intersectChange' )
+            this.trigger( 'intersectChange', [ this.intersects ] )
+            this.exp.cvs.style.cursor = this.intersects[ 0 ]?.object.name.includes( '_linkbox' ) ?
+                'pointer' : 'auto'
         }
     }
 }

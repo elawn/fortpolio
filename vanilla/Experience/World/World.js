@@ -1,5 +1,5 @@
 import Experience from '../Experience'
-import { Box3, DefaultLoadingManager, Object3D } from 'three'
+import { Box3, Object3D } from 'three'
 import Text from './Text'
 
 export default class World {
@@ -8,7 +8,6 @@ export default class World {
         this.scene = this.exp.scene
         this.cam = this.exp.cam.instance
         this.sizes = this.exp.sizes
-        this.gui = this.exp.gui
         this.widest = null
         this.fovDist = null
         this.updates = []
@@ -83,7 +82,6 @@ export default class World {
         }
 
         this.text0.enter( 1 )
-
         this.text1.group.position.x = 0.1
         this.text2.group.position.x = -0.1
     }
@@ -96,8 +94,6 @@ export default class World {
     }
 
     update() {
-        for ( const update of this.updates ) {
-            update()
-        }
+        for ( const update of this.updates ) update()
     }
 }

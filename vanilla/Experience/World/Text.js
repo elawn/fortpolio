@@ -1,23 +1,15 @@
-import {
-    Box3,
-    MeshLambertMaterial,
-    MeshMatcapMaterial,
-    RepeatWrapping,
-    SpotLight,
-    Vector3, VideoTexture
-} from 'three'
+import { Box3, Vector3, MeshMatcapMaterial } from 'three'
 import Experience from '../Experience'
-import { textureLoader, gltfLoader } from '../Utils/Loaders'
+import { gltfLoader, textureLoader } from '../Utils/Loaders'
 import { gsap } from 'gsap'
+import Link from './Link'
 
 const FONT_TEXTURE = textureLoader.load( '/textures/matcaps/5.png' )
-const LINK_LIGHT_INTENSITY = 5
 
 export default class Text {
     constructor( path, id, links = [] ) {
         this.exp = new Experience()
         this.scene = this.exp.scene
-        this.cursor = this.exp.cursor
         this.group = null
         this.scroller = this.exp.scroller
         this.id = id
@@ -31,10 +23,8 @@ export default class Text {
         } )
 
         if ( this.links.length ) {
-            this.hoverMat = new MeshLambertMaterial( { color: 0xdedede } )
             this.linksMat = this.textMat.clone()
             this.linksMat.color.set( '#e84343' )
-            this.linksMat.opacity = 0
         }
 
         gltfLoader.load( path, gltf => this.onLoad( gltf ) )
@@ -51,8 +41,8 @@ export default class Text {
         this.group.rotation.y = Math.PI * 0.5
         this.group.position.y = this.id * -this.exp.sizes.objsDist
 
-        const box = new Box3().setFromObject(this.group)
-        box.getSize(this.size)
+        const box = new Box3().setFromObject( this.group )
+        box.getSize( this.size )
 
         this.scene.add( this.group )
 
@@ -65,107 +55,12 @@ export default class Text {
 
     buildLinks() {
         for ( const link of this.links ) {
-            const vidEl = document.createElement( 'video' )
-            vidEl.src = `/textures/videos/${ link.key }.mp4`
-            vidEl.muted = true
-            vidEl.loop = true
-            vidEl.playsInline = true
-            vidEl.autoplay = true
-            document.body.appendChild( vidEl )
-            const linkTexture = new VideoTexture( vidEl )
-
-            linkTexture.wrapS = RepeatWrapping
-            linkTexture.wrapT = RepeatWrapping
-            linkTexture.anisotropy = this.exp.renderer.instance.capabilities.getMaxAnisotropy()
-
-            this.exp.world.updates.push( () => {
-                linkTexture.update()
-            } )
-
-            link.children = this.group.children.filter( child => child.name.startsWith( link.key ) )
-            link.children.forEach( child => {
-                child.material = this.linksMat
-
-                if ( child.name.includes( 'linkbox' ) ) {
-                    child.visible = false
-                    this.cursor.objects.push( child )
-
-                    const linkLight = new SpotLight(
-                        0xffffff,
-                        0,
-                        5.5,
-                        0.14,
-                        0,
-                        0.5
-                    )
-                    linkLight.castShadow = true
-                    linkLight.shadow.mapSize.width = 1024
-                    linkLight.shadow.mapSize.height = 1024
-                    linkLight.shadow.camera.near = 0.1
-                    linkLight.shadow.camera.far = 10
-                    linkLight.map = linkTexture
-                    linkLight.target = child
-
-                    const linkWorldPos = child.getWorldPosition( new Vector3() )
-
-                    linkLight.position.set( linkWorldPos.x, linkWorldPos.y, 4 )
-
-                    this.scene.add( linkLight )
-
-                    link.light = linkLight
-
-                    // const helper = new SpotLightHelper( linkLight )
-
-                    // this.scene.add( helper )
-                } else {
-                    child.receiveShadow = true
-                    child.castShadow = true
-                }
-            } )
+            new Link(
+                link,
+                this.group.children.filter( child => child.name.startsWith( link.key ) ),
+                this.linksMat
+            )
         }
-        this.cursor.on( 'intersectChange', () => {
-            if ( this.cursor.intersects.length ) {
-                for ( const link of this.links ) {
-                    this.cursor.intersects[ 0 ].object.name === `${ link.key }_linkbox` ? this.handleMouseEnter( link ) :
-                        this.handleMouseLeave( link )
-                }
-            } else {
-                for ( const link of this.links ) {
-                    this.handleMouseLeave( link )
-                }
-            }
-
-            this.exp.cvs.style.cursor = this.cursor.intersects[ 0 ]?.object.name.includes( '_linkbox' ) ?
-                'pointer' : 'auto'
-        } )
-        window.addEventListener( 'click', () => {
-            if ( this.cursor.intersects.length ) {
-                this.handleClick(
-                    this.links.find( link => this.cursor.intersects[ 0 ].object.name === `${ link.key }_linkbox` )
-                )
-            }
-        } )
-    }
-
-    handleMouseEnter( link ) {
-        for ( const child of link.children ) {
-            child.material = this.hoverMat
-            child.material.needsUpdate = true
-        }
-        link.light.intensity = LINK_LIGHT_INTENSITY
-        this.hoverMat.color.set( link.hoverColor )
-    }
-
-    handleMouseLeave( link ) {
-        for ( const child of link.children ) {
-            child.material = this.linksMat
-        }
-        link.light.intensity = 0
-    }
-
-    handleClick( link ) {
-        if ( link === undefined ) return
-        window.open( link.url, '_blank' )
     }
 
     enter( delay = 0 ) {

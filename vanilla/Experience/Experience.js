@@ -44,7 +44,7 @@ export default class Experience {
         this.world = new World()
         this.loaded = false
 
-        // disable orbitcontrols on cmd down
+        // enable orbitcontrols on cmd down
         window.addEventListener( 'keydown', ( { key } ) => {
             this.cam.ctls.enabled = key === 'Meta'
         } )
@@ -52,10 +52,7 @@ export default class Experience {
             this.cam.ctls.enabled = !( key === 'Meta' )
         } )
 
-        // handle resize
         this.sizes.on( 'resize', () => this.resize() )
-
-        // tick event
         this.time.on( 'tick', () => this.update() )
 
         DefaultLoadingManager.onLoad = () => this.onLoad()
