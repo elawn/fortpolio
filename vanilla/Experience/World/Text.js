@@ -1,5 +1,5 @@
 import {
-    Box3, BoxGeometry, Mesh,
+    Box3,
     MeshLambertMaterial,
     MeshMatcapMaterial,
     RepeatWrapping,

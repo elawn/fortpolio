@@ -9,12 +9,14 @@ export default class Time extends EventEmitter {
         this.curr = this.start
         this.elapsed = 0
         this.delta = 16
+        this.correction = 1
 
         window.requestAnimationFrame(() => this.tick())
     }
 
     tick() {
         const curr = Date.now()
+        this.correction = (curr - this.curr) / this.delta
         this.delta = curr - this.curr
         this.curr = curr
         this.elapsed = this.curr - this.start

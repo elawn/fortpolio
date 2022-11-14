@@ -9,6 +9,7 @@ import * as dat from 'lil-gui'
 import { textureLoader } from './Utils/Loaders'
 import Cursor from './Utils/Cursor'
 import Stats from 'three/examples/jsm/libs/stats.module'
+import Physics from './Utils/Physics'
 
 let instance = null
 
@@ -34,6 +35,7 @@ export default class Experience {
         this.cvs = cvs
         this.sizes = new Sizes()
         this.time = new Time()
+        this.phys = new Physics()
         this.scroller = new Scroller()
         this.scene = new Scene()
         this.cam = new Camera()
@@ -76,6 +78,7 @@ export default class Experience {
         this.cam.update()
         this.cursor.update()
         this.world.update()
+        this.phys.update()
         this.renderer.update()
 
         this.stats.end()
