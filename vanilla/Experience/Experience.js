@@ -61,7 +61,6 @@ export default class Experience {
 
     onLoad() {
         this.loaded = true
-
         this.world.onLoad()
     }
 

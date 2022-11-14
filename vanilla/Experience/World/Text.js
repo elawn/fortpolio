@@ -46,7 +46,8 @@ export default class Text {
             child.material = this.textMat
             child.position.y = Math.random() * -0.85 - 1
         } )
-        this.group.scale.set( 0.1, 0.1, 0.1 )
+        const scale = this.exp.sizes.isVert ? 0.15 : 0.1
+        this.group.scale.set( scale, scale, scale )
         this.group.rotation.y = Math.PI * 0.5
         this.group.position.y = this.id * -this.exp.sizes.objsDist
 

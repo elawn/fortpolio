@@ -12,9 +12,10 @@ export default class World {
         this.widest = null
         this.fovDist = null
         this.updates = []
+        this.suffix = this.sizes.isVert ? '_vert' : ''
 
-        this.text0 = new Text( '/objects/text1.glb', 0 )
-        this.text1 = new Text( '/objects/text2.glb', 1, [
+        this.text0 = new Text( `/objects/text1${this.suffix}.glb`, 0 )
+        this.text1 = new Text( `/objects/text2${this.suffix}.glb`, 1, [
             {
                 key: 'sbux',
                 children: [],
@@ -40,7 +41,7 @@ export default class World {
                 hoverColor: '#dedede'
             }
         ] )
-        this.text2 = new Text( '/objects/text3.glb', 2, [
+        this.text2 = new Text( `/objects/text3${this.suffix}.glb`, 2, [
             {
                 key: 'tbx',
                 children: [],
@@ -50,7 +51,7 @@ export default class World {
                 hoverColor: '#ffffff'
             }
         ] )
-        this.text3 = new Text( '/objects/text4.glb', 3, [
+        this.text3 = new Text( `/objects/text4${this.suffix}.glb`, 3, [
             {
                 key: 'click',
                 children: [],
@@ -77,6 +78,10 @@ export default class World {
     }
 
     setupTl() {
+        if (this.sizes.isVert) {
+            this.text0.group.position.y = 0.175
+        }
+
         this.text0.enter( 1 )
 
         this.text1.group.position.x = 0.1
