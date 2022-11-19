@@ -1,4 +1,4 @@
-import { Box3, Vector3, MeshMatcapMaterial } from 'three'
+import { Box3, Vector3, MeshMatcapMaterial, Mesh, BoxGeometry, Vector2 } from 'three'
 import Experience from '../Experience'
 import { gltfLoader, textureLoader } from '../Utils/Loaders'
 import { gsap } from 'gsap'
@@ -21,6 +21,7 @@ export default class Text {
             transparent: true,
             opacity: 0
         } )
+        this.twoDeeVertices = []
 
         if ( this.links.length ) {
             this.linksMat = this.textMat.clone()
@@ -32,19 +33,33 @@ export default class Text {
 
     onLoad( gltf ) {
         this.group = gltf.scene
-        this.group.children.filter( child => !child.name.includes( 'linkbox' ) ).forEach( child => {
-            child.material = this.textMat
-            child.position.y = Math.random() * -0.85 - 1
-        } )
         const scale = this.exp.sizes.isVert ? 0.15 : 0.1
         this.group.scale.set( scale, scale, scale )
         this.group.rotation.y = Math.PI * 0.5
         this.group.position.y = this.id * -this.exp.sizes.objsDist
 
+        this.group.children.filter( child => !child.name.includes( 'linkbox' ) ).forEach( child => {
+            child.material = this.textMat
+
+            const child2dVertices = []
+            const childPos = child.geometry.attributes.position
+            for ( let i = 0, len = childPos.count; i < len; i++ ) {
+                const vertex = new Vector3()
+                vertex.fromBufferAttribute( childPos, 0 )
+                const worldVertex = child.localToWorld( vertex )
+                child2dVertices.push( { x: worldVertex.x, y: worldVertex.y } )
+            }
+            this.twoDeeVertices.push( child2dVertices )
+
+            child.position.y = Math.random() * -0.85 - 1
+        } )
+
         const box = new Box3().setFromObject( this.group )
         box.getSize( this.size )
 
         this.scene.add( this.group )
+
+        this.scene.updateMatrixWorld()
 
         this.scroller.on( 'newSect', ( id ) => {
             if ( id === this.id && !this.enterStarted ) this.enter()
