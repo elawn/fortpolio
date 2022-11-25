@@ -1,18 +1,16 @@
-import Matter from 'matter-js'
+import { World } from 'p2'
 import Experience from '../Experience'
 
 export default class Physics {
     constructor() {
         this.exp = new Experience()
-        this.engine = Matter.Engine.create()
-        this.bodies = Matter.Bodies
-    }
-
-    add( object ) {
-        Matter.Composite.add( this.engine.world, object )
+        this.world = new World( {
+            gravity: [ 0, -9.82 ]
+        } )
+        this.step = 1 / 60
     }
 
     update() {
-        Matter.Engine.update( this.engine, this.exp.time.delta, this.exp.time.correction )
+        this.world.step( this.step, this.exp.time.delta )
     }
 }
