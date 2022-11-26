@@ -1,4 +1,4 @@
-import { World } from 'p2'
+import { ContactMaterial, Material, World } from 'p2'
 import Experience from '../Experience'
 
 export default class Physics {
@@ -8,6 +8,12 @@ export default class Physics {
             gravity: [ 0, -9.82 ]
         } )
         this.step = 1 / 60
+        this.ballMaterial = new Material( 0 )
+        this.charMaterial = new Material( 1 )
+        this.world.addContactMaterial( new ContactMaterial( this.charMaterial, this.ballMaterial, {
+            restitution: 1,
+            stiffness: Number.MAX_VALUE
+        } ) )
     }
 
     update() {

@@ -13,7 +13,7 @@ export default class World {
         this.updates = []
         this.suffix = this.sizes.isVert ? '_vert' : ''
 
-        this.text0 = new Text( `/objects/text1${this.suffix}.glb`, 0 )
+        this.text0 = new Text( `/objects/text1${this.suffix}.glb`, 0, [], 0, this.sizes.isVert ? 0.175 : 0 )
         this.text1 = new Text( `/objects/text2${this.suffix}.glb`, 1, [
             {
                 key: 'sbux',
@@ -39,7 +39,7 @@ export default class World {
                 url: 'https://www.cssdesignawards.com/sites/happy-egg-co/36835/',
                 hoverColor: '#dedede'
             }
-        ] )
+        ], 0.1 )
         this.text2 = new Text( `/objects/text3${this.suffix}.glb`, 2, [
             {
                 key: 'tbx',
@@ -49,7 +49,7 @@ export default class World {
                 url: 'https://thinkingbox.com/',
                 hoverColor: '#ffffff'
             }
-        ] )
+        ], -0.1 )
         this.text3 = new Text( `/objects/text4${this.suffix}.glb`, 3, [
             {
                 key: 'click',
@@ -71,19 +71,9 @@ export default class World {
         ].reduce( ( prev, curr ) => curr > prev ? curr : prev, 0 )
         this.fovDist = this.cam.position.z - this.text0.size.z / 2
 
-        this.setupTl()
+        this.text0.enter( 1 )
         this.setFov()
         this.cam.updateProjectionMatrix()
-    }
-
-    setupTl() {
-        if (this.sizes.isVert) {
-            this.text0.group.position.y = 0.175
-        }
-
-        this.text0.enter( 1 )
-        this.text1.group.position.x = 0.1
-        this.text2.group.position.x = -0.1
     }
 
     setFov() {
