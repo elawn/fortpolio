@@ -5,7 +5,7 @@ export default class Physics {
     constructor() {
         this.exp = new Experience()
         this.world = new World( {
-            gravity: [ 0, -9.82 ]
+            gravity: [ 0, -0.02 ]
         } )
         this.step = 1 / 60
         this.ballMaterial = new Material( 0 )

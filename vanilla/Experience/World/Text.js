@@ -4,6 +4,7 @@ import { gltfLoader, textureLoader } from '../Utils/Loaders'
 import { gsap } from 'gsap'
 import Link from './Link'
 import { Body, Convex } from 'p2'
+import Ball from './Ball'
 
 const FONT_TEXTURE = textureLoader.load( '/textures/matcaps/5.png' )
 
@@ -25,6 +26,7 @@ export default class Text {
             opacity: 0
         } )
         this.twoDeeCenter = [ 0, 0 ]
+        this.ballsMade = false
 
         if ( this.links.length ) {
             this.linksMat = this.textMat.clone()
@@ -42,12 +44,13 @@ export default class Text {
         this.group.position.y = this.id * -this.exp.sizes.objsDist + this.yOffset
         this.group.position.x = this.xOffset
 
-        const box = new Box3().setFromObject( this.group )
-        box.getSize( this.size )
+        this.box = new Box3().setFromObject( this.group )
+        this.box.getSize( this.size )
+        const { max, min } = this.box
 
         this.twoDeeCenter = [
-            box.max.x.toFixed( 5 ) - ( box.max.x.toFixed( 5 ) - box.min.x.toFixed( 5 ) ) / 2,
-            box.max.y.toFixed( 5 ) - ( box.max.y.toFixed( 5 ) - box.min.y.toFixed( 5 ) ) / 2
+            max.x.toFixed( 5 ) - ( max.x.toFixed( 5 ) - min.x.toFixed( 5 ) ) / 2,
+            max.y.toFixed( 5 ) - ( max.y.toFixed( 5 ) - min.y.toFixed( 5 ) ) / 2
         ]
 
         // TODO: clean this all up eventually
@@ -63,19 +66,20 @@ export default class Text {
             for ( let i = 0, len = childPos.count; i < len; i++ ) {
                 const vertex = new Vector3()
                 vertex.fromBufferAttribute( childPos, 0 )
+
                 const worldVertex = child.localToWorld( vertex )
                 child2dVertices.push( [ worldVertex.x, worldVertex.y ] )
             }
-            const charShape = new Convex({
+            const charShape = new Convex( {
                 vertices: child2dVertices
-            })
+            } )
             charShape.material = this.exp.phys.charMaterial
-            this.physBody.addShape(charShape) // do we need an offset?
+            this.physBody.addShape( charShape ) // do we need an offset?
 
             child.position.y = Math.random() * -0.85 - 1
         } )
 
-        this.exp.phys.world.addBody(this.physBody)
+        this.exp.phys.world.addBody( this.physBody )
 
         this.scene.add( this.group )
 
@@ -106,7 +110,10 @@ export default class Text {
                 duration,
                 ease: 'expo.out',
                 y: 0,
-                delay: delay * 1.1
+                delay: delay * 1.1,
+                onComplete: () => {
+                    if ( !this.ballsMade ) this.makeBalls()
+                }
             } )
             gsap.to( child.material, {
                 duration: duration / 2,
@@ -115,5 +122,18 @@ export default class Text {
                 delay
             } )
         } )
+    }
+
+    makeBalls() {
+        this.ballsMade = true
+        this.makeBall()
+        setInterval( () => this.makeBall(), 5000 )
+    }
+
+    makeBall() {
+        new Ball(
+            this.box.max.y + 0.5,
+            !this.id % 2 ? 'left' : 'right'
+        )
     }
 }

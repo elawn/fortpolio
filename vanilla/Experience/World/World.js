@@ -12,9 +12,10 @@ export default class World {
         this.fovDist = null
         this.updates = []
         this.suffix = this.sizes.isVert ? '_vert' : ''
+        this.balls = {}
 
-        this.text0 = new Text( `/objects/text1${this.suffix}.glb`, 0, [], 0, this.sizes.isVert ? 0.175 : 0 )
-        this.text1 = new Text( `/objects/text2${this.suffix}.glb`, 1, [
+        this.text0 = new Text( `/objects/text1${ this.suffix }.glb`, 0, [], 0, this.sizes.isVert ? 0.175 : 0 )
+        this.text1 = new Text( `/objects/text2${ this.suffix }.glb`, 1, [
             {
                 key: 'sbux',
                 children: [],
@@ -40,7 +41,7 @@ export default class World {
                 hoverColor: '#dedede'
             }
         ], 0.1 )
-        this.text2 = new Text( `/objects/text3${this.suffix}.glb`, 2, [
+        this.text2 = new Text( `/objects/text3${ this.suffix }.glb`, 2, [
             {
                 key: 'tbx',
                 children: [],
@@ -50,7 +51,7 @@ export default class World {
                 hoverColor: '#ffffff'
             }
         ], -0.1 )
-        this.text3 = new Text( `/objects/text4${this.suffix}.glb`, 3, [
+        this.text3 = new Text( `/objects/text4${ this.suffix }.glb`, 3, [
             {
                 key: 'click',
                 children: [],
@@ -79,11 +80,12 @@ export default class World {
     setFov() {
         if ( !this.exp.loaded ) return
         // credit to [WestLangley](https://stackoverflow.com/a/14614736) for the next bit
-        const x = ( (this.widest + 0.35) / ( this.sizes.width / this.sizes.height ) ) / ( 2 * this.fovDist )
+        const x = ( ( this.widest + 0.35 ) / ( this.sizes.width / this.sizes.height ) ) / ( 2 * this.fovDist )
         this.cam.fov = 2 * Math.atan( x ) * ( 180 / Math.PI )
     }
 
     update() {
         for ( const update of this.updates ) update()
+        for ( const id in this.balls ) this.balls[ id ].update()
     }
 }
