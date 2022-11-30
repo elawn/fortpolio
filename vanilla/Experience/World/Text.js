@@ -26,6 +26,7 @@ export default class Text {
             opacity: 0
         } )
         this.ballsMade = false
+        this.isActive = ( this.id === 0 )
 
         if ( this.links.length ) {
             this.linksMat = this.textMat.clone()
@@ -70,6 +71,8 @@ export default class Text {
             child.position.y = Math.random() * -0.85 - 1
         } )
 
+        console.log(this.group)
+
         this.exp.phys.world.addBody( this.physBody )
 
         this.scene.add( this.group )
@@ -77,6 +80,7 @@ export default class Text {
         this.scene.updateMatrixWorld()
 
         this.scroller.on( 'newSect', ( id ) => {
+            this.isActive = ( id === this.id )
             if ( id === this.id && !this.enterStarted ) this.enter()
         } )
 
@@ -101,16 +105,16 @@ export default class Text {
                 duration,
                 ease: 'expo.out',
                 y: 0,
-                delay: delay * 1.1,
-                onComplete: () => {
-                    if ( !this.ballsMade ) this.makeBalls()
-                }
+                delay: delay * 1.1
             } )
             gsap.to( child.material, {
                 duration: duration / 2,
                 ease: 'power1.in',
                 opacity: 1,
-                delay
+                delay,
+                onComplete: () => {
+                    if ( !this.ballsMade ) this.makeBalls()
+                }
             } )
         } )
     }
@@ -118,7 +122,9 @@ export default class Text {
     makeBalls() {
         this.ballsMade = true
         this.makeBall()
-        setInterval( () => this.makeBall(), 2000 )
+        setInterval( () => {
+            if ( this.isActive ) this.makeBall()
+        }, 2000 )
     }
 
     makeBall() {
