@@ -3,15 +3,14 @@ import { Body, Circle } from 'p2'
 import { Mesh, MeshMatcapMaterial, SphereGeometry } from 'three'
 import { matcaps } from '../Utils/Materials'
 import { gsap } from 'gsap'
-import scene from 'three/addons/offscreen/scene'
 
 export default class Ball {
     constructor( y, side ) {
         this.exp = new Experience()
         this.y = y
         this.side = side
-        this.minRad = 0.01
-        this.maxRad = 0.07
+        this.minRad = 0.045
+        this.maxRad = 0.12
         this.rad = Math.min( Math.random() * this.maxRad + this.minRad, this.maxRad )
         this.fadingOut = false
 
@@ -22,13 +21,15 @@ export default class Ball {
     }
 
     makePhys() {
+        const xVelocity = Math.min(Math.random() * 0.15 + 0.06, 0.15)
         this.physBall = new Body( {
             position: [
-                this.side === 'left' ? -1 : 1,
+                this.side === 'left' ? -1.25 : 1.25,
                 this.y
             ],
-            mass: 1,
-            velocity: [ this.side === 'left' ? 0.05 : -0.05, 0 ]
+            mass: (this.rad / this.maxRad) * 5,
+            velocity: [ this.side === 'left' ? xVelocity : -xVelocity, 0 ],
+            angularVelocity: this.side === 'left' ? 1 : -1
         } )
         const ballShape = new Circle( { radius: this.rad } )
         ballShape.material = this.exp.phys.ballMaterial
@@ -54,7 +55,8 @@ export default class Ball {
 
     update() {
         this.ball.position.set( ...this.physBall.position, 0 )
-        this.ball.rotation.z = this.physBall.angle
+        // this.ball.rotation.z = this.physBall.angle
+        this.ball.rotation.z += 0.1
         if ( !this.fadingOut && this.ball.position.y < this.y - this.exp.sizes.objsDist ) {
             this.fadeOut()
         }

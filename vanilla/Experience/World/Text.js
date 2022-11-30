@@ -1,4 +1,4 @@
-import { Box3, Vector3, MeshMatcapMaterial, Mesh, BoxGeometry, Vector2 } from 'three'
+import { Box3, Vector3, MeshMatcapMaterial } from 'three'
 import Experience from '../Experience'
 import { gltfLoader, textureLoader } from '../Utils/Loaders'
 import { gsap } from 'gsap'
@@ -25,7 +25,6 @@ export default class Text {
             transparent: true,
             opacity: 0
         } )
-        this.twoDeeCenter = [ 0, 0 ]
         this.ballsMade = false
 
         if ( this.links.length ) {
@@ -46,32 +45,24 @@ export default class Text {
 
         this.box = new Box3().setFromObject( this.group )
         this.box.getSize( this.size )
-        const { max, min } = this.box
-
-        this.twoDeeCenter = [
-            max.x.toFixed( 5 ) - ( max.x.toFixed( 5 ) - min.x.toFixed( 5 ) ) / 2,
-            max.y.toFixed( 5 ) - ( max.y.toFixed( 5 ) - min.y.toFixed( 5 ) ) / 2
-        ]
 
         // TODO: clean this all up eventually
-        this.physBody = new Body( {
-            position: this.twoDeeCenter
-        } )
+        this.physBody = new Body()
 
         this.group.children.filter( child => !child.name.includes( 'linkbox' ) ).forEach( child => {
             child.material = this.textMat
 
-            const child2dVertices = []
-            const childPos = child.geometry.attributes.position
-            for ( let i = 0, len = childPos.count; i < len; i++ ) {
-                const vertex = new Vector3()
-                vertex.fromBufferAttribute( childPos, 0 )
+            // GET BOUNDING BOX VERTICES OF CHAR
+            const charBox = new Box3().setFromObject( child )
+            const { max, min } = charBox
 
-                const worldVertex = child.localToWorld( vertex )
-                child2dVertices.push( [ worldVertex.x, worldVertex.y ] )
-            }
             const charShape = new Convex( {
-                vertices: child2dVertices
+                vertices: [
+                    [ min.x + 0.0011, max.y ], // tweak to imitate font slant
+                    [ min.x, min.y ],
+                    [ max.x - 0.0011, min.y ], // tweak to imitate font slant
+                    [ max.x, max.y ]
+                ]
             } )
             charShape.material = this.exp.phys.charMaterial
             this.physBody.addShape( charShape ) // do we need an offset?
@@ -127,12 +118,12 @@ export default class Text {
     makeBalls() {
         this.ballsMade = true
         this.makeBall()
-        setInterval( () => this.makeBall(), 5000 )
+        setInterval( () => this.makeBall(), 2000 )
     }
 
     makeBall() {
         new Ball(
-            this.box.max.y + 0.5,
+            this.box.max.y + 0.75,
             !this.id % 2 ? 'left' : 'right'
         )
     }

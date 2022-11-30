@@ -12,7 +12,8 @@ export default class Physics {
         this.charMaterial = new Material( 1 )
         this.world.addContactMaterial( new ContactMaterial( this.charMaterial, this.ballMaterial, {
             restitution: 1,
-            stiffness: Number.MAX_VALUE
+            stiffness: Number.MAX_VALUE,
+            friction: 0
         } ) )
     }
 
