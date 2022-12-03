@@ -15,6 +15,7 @@ export default class Physics {
             stiffness: Number.MAX_VALUE,
             friction: 0
         } ) )
+        this.world.sleepMode = World.BODY_SLEEPING
     }
 
     update() {

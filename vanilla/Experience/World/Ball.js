@@ -21,21 +21,22 @@ export default class Ball {
     }
 
     makePhys() {
-        const xVelocity = Math.min(Math.random() * 0.15 + 0.06, 0.15)
+        const xVelocity = Math.min( Math.random() * 0.15 + 0.06, 0.15 )
         this.physBall = new Body( {
             position: [
                 this.side === 'left' ? -1.25 : 1.25,
                 this.y
             ],
-            mass: (this.rad / this.maxRad) * 5,
-            velocity: [ this.side === 'left' ? xVelocity : -xVelocity, 0 ],
-            angularVelocity: this.side === 'left' ? 1 : -1
+            mass: ( this.rad / this.maxRad ) * 5,
+            velocity: [ this.side === 'left' ? xVelocity : -xVelocity, 0 ]
         } )
         const ballShape = new Circle( { radius: this.rad } )
         ballShape.material = this.exp.phys.ballMaterial
         this.physBall.addShape( ballShape )
         this.physBall.damping = 0.05
-        this.physBall.angularDamping = 0.05
+        this.physBall.sleepSpeedLimit = 0.001
+        this.physBall.sleepTimeLimit = 10
+        this.physBall.on( 'sleep', () => this.fadeOut(), this )
 
         this.exp.phys.world.addBody( this.physBall )
     }
@@ -55,8 +56,6 @@ export default class Ball {
 
     update() {
         this.ball.position.set( ...this.physBall.position, 0 )
-        // this.ball.rotation.z = this.physBall.angle
-        this.ball.rotation.z += 0.1
         if ( !this.fadingOut && this.ball.position.y < this.y - this.exp.sizes.objsDist ) {
             this.fadeOut()
         }
@@ -73,9 +72,10 @@ export default class Ball {
 
     destroy() {
         delete this.exp.world.balls[ this.ball.uuid ]
+        this.exp.scene.remove( this.ball )
         this.ball.geometry.dispose()
         this.ball.material.dispose()
-        this.exp.scene.remove( this.ball )
+        this.exp.phys.world.removeBody( this.physBall )
         this.exp.renderer.instance.renderLists.dispose()
     }
 }
