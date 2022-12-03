@@ -71,8 +71,6 @@ export default class Text {
             child.position.y = Math.random() * -0.85 - 1
         } )
 
-        console.log(this.group)
-
         this.exp.phys.world.addBody( this.physBody )
 
         this.scene.add( this.group )

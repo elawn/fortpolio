@@ -20,10 +20,6 @@ export default class Scroller extends EventEmitter {
         this.scrollBox.classList.toggle( 'active', val )
     }
 
-    get showBox() {
-        return this.scrollBox.classList.contains( 'active' )
-    }
-
     handleScroll() {
         window.addEventListener( 'scroll', () => {
             this.showBox = false
