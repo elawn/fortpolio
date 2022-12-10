@@ -25,7 +25,7 @@ export default class Renderer {
         this.instance.physicallyCorrectLights = true
         this.instance.outputEncoding = sRGBEncoding
         this.instance.toneMapping = ACESFilmicToneMapping
-        this.instance.toneMappingExposure = 1.75
+        this.instance.toneMappingExposure = 1.15
         this.instance.shadowMap.enabled = true
         this.instance.shadowMap.type = PCFSoftShadowMap
         this.instance.setSize(this.sizes.width, this.sizes.height)

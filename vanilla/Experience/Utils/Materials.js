@@ -12,5 +12,7 @@ export const matcaps = [
     textureLoader.load('/textures/matcaps/6.png'),
     textureLoader.load('/textures/matcaps/7.png'),
     textureLoader.load('/textures/matcaps/8.png'),
-    textureLoader.load('/textures/matcaps/9.png')
+    textureLoader.load('/textures/matcaps/9.png'),
+    textureLoader.load('/textures/matcaps/10.png'),
+    textureLoader.load('/textures/matcaps/11.png')
 ]

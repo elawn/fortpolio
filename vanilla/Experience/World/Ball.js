@@ -1,6 +1,6 @@
 import Experience from '../Experience'
 import { Body, Circle } from 'p2'
-import { Mesh, MeshMatcapMaterial, SphereGeometry } from 'three'
+import { BackSide, Mesh, MeshMatcapMaterial, SphereGeometry } from 'three'
 import { matcaps } from '../Utils/Materials'
 import { gsap } from 'gsap'
 
@@ -28,12 +28,14 @@ export default class Ball {
                 this.y
             ],
             mass: ( this.rad / this.maxRad ) * 5,
-            velocity: [ this.side === 'left' ? xVelocity : -xVelocity, 0 ]
+            velocity: [ this.side === 'left' ? xVelocity : -xVelocity, 0 ],
+            angularVelocity: this.side === 'left' ? -1 : 1
         } )
         const ballShape = new Circle( { radius: this.rad } )
         ballShape.material = this.exp.phys.ballMaterial
         this.physBall.addShape( ballShape )
         this.physBall.damping = 0.05
+        this.physBall.angularDamping = 0.05
         this.physBall.sleepSpeedLimit = 0.001
         this.physBall.sleepTimeLimit = 10
         this.physBall.on( 'sleep', () => this.fadeOut(), this )
@@ -56,6 +58,7 @@ export default class Ball {
 
     update() {
         this.ball.position.set( ...this.physBall.position, 0 )
+        this.ball.rotation.z = this.physBall.angle
         if ( !this.fadingOut && this.ball.position.y < this.y - this.exp.sizes.objsDist ) {
             this.fadeOut()
         }

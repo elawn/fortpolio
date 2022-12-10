@@ -6,7 +6,7 @@ import Link from './Link'
 import { Body, Convex } from 'p2'
 import Ball from './Ball'
 
-const FONT_TEXTURE = textureLoader.load( '/textures/matcaps/5.png' )
+const FONT_TEXTURE = textureLoader.load( '/textures/matcaps/12.png' )
 
 export default class Text {
     constructor( path, id, links = [], xOffset = 0, yOffset = 0 ) {
@@ -22,6 +22,7 @@ export default class Text {
         this.size = new Vector3()
         this.textMat = new MeshMatcapMaterial( {
             matcap: FONT_TEXTURE,
+            color: '#c4c4c4',
             transparent: true,
             opacity: 0
         } )
@@ -30,7 +31,7 @@ export default class Text {
 
         if ( this.links.length ) {
             this.linksMat = this.textMat.clone()
-            this.linksMat.color.set( '#e84343' )
+            this.linksMat.color.set( '#e32525' )
         }
 
         gltfLoader.load( path, gltf => this.onLoad( gltf ) )

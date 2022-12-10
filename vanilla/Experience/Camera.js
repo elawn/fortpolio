@@ -63,7 +63,7 @@ export default class Camera {
             },
             scrollTrigger: {
                 trigger: '#sections',
-                scrub: 1,
+                scrub: 0.25,
                 end: 'bottom bottom'
             },
             x: 2,
