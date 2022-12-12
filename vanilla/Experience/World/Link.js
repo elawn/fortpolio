@@ -2,7 +2,7 @@ import Experience from '../Experience'
 import { hoverMat } from '../Utils/Materials'
 import { RepeatWrapping, SpotLight, Vector3, VideoTexture } from 'three'
 
-const LINK_LIGHT_INTENSITY = 7.5
+const LINK_LIGHT_INTENSITY = 9
 
 export default class Link {
     constructor( link, children, mat ) {
@@ -70,11 +70,13 @@ export default class Link {
 
     addListeners() {
         this.cursor.on( 'intersectChange', ( i ) => {
+            if ( this.children[ 0 ].material.opacity !== 1 ) return
             if ( i.length && i[ 0 ].object.name === `${ this.link.key }_linkbox` ) this.handleMouseEnter()
             else this.handleMouseLeave()
         } )
 
         this.cursor.on( 'click', ( i ) => {
+            if ( this.children[ 0 ].material.opacity !== 1 ) return
             if ( i[ 0 ].object.name === `${ this.link.key }_linkbox` ) window.open( this.link.url, '_blank' )
         } )
     }
