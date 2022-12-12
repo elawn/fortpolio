@@ -5,7 +5,8 @@ export default class Physics {
     constructor() {
         this.exp = new Experience()
         this.world = new World( {
-            gravity: [ 0, -0.02 ]
+            gravity: [ 0, -0.02 ],
+            islandSplit: true
         } )
         this.step = 1 / 60
         this.ballMaterial = new Material( 0 )
@@ -16,6 +17,8 @@ export default class Physics {
             friction: 0
         } ) )
         this.world.sleepMode = World.BODY_SLEEPING
+        this.world.solver.tolerance = 0.1
+        this.world.solver.iterations = 10
     }
 
     update() {
