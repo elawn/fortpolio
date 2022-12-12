@@ -18,7 +18,7 @@ export default class Physics {
         } ) )
         this.world.sleepMode = World.BODY_SLEEPING
         this.world.solver.tolerance = 0.1
-        this.world.solver.iterations = 10
+        this.world.solver.iterations = 7
     }
 
     update() {
