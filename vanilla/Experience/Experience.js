@@ -28,8 +28,8 @@ export default class Experience {
             .onChange( value => this.updateMatcaps( value ) )
         this.gui.close()
         this.stats = new Stats()
-        this.stats.showPanel(0)
-        document.body.appendChild(this.stats.dom)
+        this.stats.showPanel( 0 )
+        document.body.appendChild( this.stats.dom )
 
         // setup
         this.cvs = cvs
@@ -43,6 +43,7 @@ export default class Experience {
         this.cursor = new Cursor()
         this.world = new World()
         this.loaded = false
+        this.loadingBar = document.querySelector( '#loading-bar-inner' )
 
         // enable orbitcontrols on cmd down
         window.addEventListener( 'keydown', ( { key } ) => {
@@ -55,12 +56,20 @@ export default class Experience {
         this.sizes.on( 'resize', () => this.resize() )
         this.time.on( 'tick', () => this.update() )
 
+        DefaultLoadingManager.onProgress = ( _, loaded, total ) => this.onProgress( loaded, total )
         DefaultLoadingManager.onLoad = () => this.onLoad()
     }
 
+    onProgress( loaded, total ) {
+        this.loadingBar.style.width = `${ ( loaded / total ) * 100 }%`
+    }
+
     onLoad() {
-        this.loaded = true
-        this.world.onLoad()
+        setTimeout( () => {
+            document.body.classList.remove( 'loading' )
+            this.loaded = true
+            this.world.onLoad()
+        }, 500 )
     }
 
     resize() {
