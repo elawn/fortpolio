@@ -22,6 +22,6 @@ export default class Physics {
     }
 
     update() {
-        this.world.step( this.step, this.exp.time.delta )
+        this.world.step( this.step, this.exp.time.delta * 20 )
     }
 }
