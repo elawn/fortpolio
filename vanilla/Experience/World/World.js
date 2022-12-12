@@ -22,7 +22,8 @@ export default class World {
                 box: new Box3(),
                 boxObj: new Object3D(),
                 url: 'https://winners.webbyawards.com/2018/websites-and-mobile-sites/general-websites-and-mobile-sites/corporate-communications/46720/starbucks-channel',
-                hoverColor: '#eeeeee'
+                // hoverColor: '#eeeeee'
+                hoverColor: '#ffffff'
             },
             {
                 key: 'adbe',

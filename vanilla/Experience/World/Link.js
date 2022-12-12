@@ -2,7 +2,7 @@ import Experience from '../Experience'
 import { hoverMat } from '../Utils/Materials'
 import { RepeatWrapping, SpotLight, Vector3, VideoTexture } from 'three'
 
-const LINK_LIGHT_INTENSITY = 5
+const LINK_LIGHT_INTENSITY = 7.5
 
 export default class Link {
     constructor( link, children, mat ) {
@@ -55,7 +55,7 @@ export default class Link {
         this.light = new SpotLight(
             0xffffff,
             0,
-            5.5,
+            5,
             0.14,
             0,
             0.5
