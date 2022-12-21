@@ -8,6 +8,7 @@ export default class Scroller extends EventEmitter {
         this.currentSect = 0
         this.maxSect = document.querySelectorAll( 'section' ).length - 1
         this.scrollBox = document.querySelector( '#scrollbox' )
+        this.menuBox = document.querySelector( '#bottom-menu' )
         this.killBox = false
         this.showTimeout = setTimeout( () => {
             this.showBox = true
@@ -20,6 +21,10 @@ export default class Scroller extends EventEmitter {
         this.scrollBox.classList.toggle( 'active', val )
     }
 
+    set showMenu( val ) {
+        this.menuBox.classList.toggle( 'active', val )
+    }
+
     handleScroll() {
         window.addEventListener( 'scroll', () => {
             this.showBox = false
@@ -29,6 +34,7 @@ export default class Scroller extends EventEmitter {
                     this.showBox = true
                 }, 5000 )
             }
+            this.showMenu = ( window.scrollY > document.body.clientHeight - window.innerHeight - 150 )
             const newSect = Math.round( window.scrollY / this.exp.sizes.height )
             if ( newSect !== this.currentSect ) {
                 this.currentSect = newSect

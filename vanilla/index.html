@@ -1,42 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap" rel="stylesheet">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;900&display=swap" rel="stylesheet">
     <title>Elan Bartholomew • Senior Front-End Developer</title>
-  </head>
-  <body class="loading" style="background: #0080ff;">
-  <div id="loading-wrapper">
+</head>
+<body class="loading" style="background: #0080ff;">
+<div id="loading-wrapper">
     <span>Loading...</span>
     <div id="loading-bar">
-      <div id="loading-bar-inner"></div>
+        <div id="loading-bar-inner"></div>
     </div>
-  </div>
-    <canvas id="cvs"></canvas>
-    <div id="sections">
-      <section id="section1">Hey! My name is Elan, and welcome to my portfolio.</section>
-      <section id="section2">I've helped build award-winning sites for Starbucks, Adobe, and Happy Egg.</section>
-      <section id="section3">I currently work at Thinkingbox as a Senior Front-End Developer.</section>
-      <section id="section4">Want to do some work together? Click here to get in touch with me.</section>
-    </div>
+</div>
+<canvas id="cvs"></canvas>
+<div id="sections">
+    <section id="section1">Hey! My name is Elan, and welcome to my portfolio.</section>
+    <section id="section2">I've helped build award-winning sites for Starbucks, Adobe, and Happy Egg.</section>
+    <section id="section3">I currently work at Thinkingbox as a Senior Front-End Developer.</section>
+    <section id="section4">Want to do some work together? Click here to get in touch with me.</section>
+</div>
 
-    <div id="scrollbox">
-      <span>SCROLL</span>
-      <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 18 18" width="18">
-        <path fill="#ffffff" d="M4,7.01a1,1,0,0,1,1.7055-.7055l3.289,3.286,3.289-3.286a1,1,0,0,1,1.437,1.3865l-.0245.0245L9.7,11.7075a1,1,0,0,1-1.4125,0L4.293,7.716A.9945.9945,0,0,1,4,7.01Z" />
-      </svg>
-      <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 18 18" width="18">
-        <path fill="#ffffff" d="M4,7.01a1,1,0,0,1,1.7055-.7055l3.289,3.286,3.289-3.286a1,1,0,0,1,1.437,1.3865l-.0245.0245L9.7,11.7075a1,1,0,0,1-1.4125,0L4.293,7.716A.9945.9945,0,0,1,4,7.01Z" />
-      </svg>
-      <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 18 18" width="18">
-        <path fill="#ffffff" d="M4,7.01a1,1,0,0,1,1.7055-.7055l3.289,3.286,3.289-3.286a1,1,0,0,1,1.437,1.3865l-.0245.0245L9.7,11.7075a1,1,0,0,1-1.4125,0L4.293,7.716A.9945.9945,0,0,1,4,7.01Z" />
-      </svg>
-    </div>
+<div id="about-wrap">
+    <div class="about-inner">
+        <div class="close-box">
+            <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 18 18" width="18">
+                <path fill="#b4b4b4" d="M13.2425,3.343,9,7.586,4.7575,3.343a.5.5,0,0,0-.707,0L3.343,4.05a.5.5,0,0,0,0,.707L7.586,9,3.343,13.2425a.5.5,0,0,0,0,.707l.707.7075a.5.5,0,0,0,.707,0L9,10.414l4.2425,4.243a.5.5,0,0,0,.707,0l.7075-.707a.5.5,0,0,0,0-.707L10.414,9l4.243-4.2425a.5.5,0,0,0,0-.707L13.95,3.343a.5.5,0,0,0-.70711-.00039Z" />
+            </svg>
+        </div>
+        <p>Hello again!
 
-    <script type="module" src="/main.js"></script>
-  </body>
+            So, about this site, where to begin…
+
+            Well, I’ve been working as a Web Developer professionally for over 9 years now, and one thing that has remained constant throughout that entire time is this: <strong>There is always more to learn.</strong> I’ve primarily worked on the front-end side of things, so my knowledge of JavaScript, CSS, and HTML is pretty stellar (if I do say so myself), but I’ve always recognized that there is value in going beyond the borders of my job title. So, in addition I’ve also learned a decent amount about Python, PHP, C++, Rust, Java, and Elixir over the years to widen my tool belt. But one thing always seemed exceptionally challenging to me: WebGL. I would look at some of the things people created with this technology and marvel at how it was even possible. So, when it came time to update my portfolio website, I decided this would be my chance to learn something along the way about how it works.
+
+            So here it is! I made this site with three.js for everything WebGL related, p2.js for the physics, GSAP for some of the animations, Blender to build the text, and Vite as my build tool. And that’s it! I do plan on updating this over time as I learn more — at some point I’d like to make a version that uses react-three-fiber, for example, but I’ve always felt that it’s best to start with vanilla JavaScript in order to better understand an API. I’ve got nothing against using frameworks (personally, I really love Vue), but I think it’s important to spend time using just the core technologies that everything compiles into from time to time so as to not become too dependent on whatever’s the most popular at the moment.
+
+            Anyways, if you’d like to view the repository I have for this site, you can do so <a href="https://github.com/elawn/fortpolio" target="_blank">here</a>.
+
+            And thanks for dropping by!
+
+            — Elan Bartholomew</p>
+    </div>
+</div>
+
+<div id="scrollbox">
+    <span>SCROLL</span>
+    <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 18 18" width="18">
+        <path fill="#ffffff"
+              d="M4,7.01a1,1,0,0,1,1.7055-.7055l3.289,3.286,3.289-3.286a1,1,0,0,1,1.437,1.3865l-.0245.0245L9.7,11.7075a1,1,0,0,1-1.4125,0L4.293,7.716A.9945.9945,0,0,1,4,7.01Z"/>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 18 18" width="18">
+        <path fill="#ffffff"
+              d="M4,7.01a1,1,0,0,1,1.7055-.7055l3.289,3.286,3.289-3.286a1,1,0,0,1,1.437,1.3865l-.0245.0245L9.7,11.7075a1,1,0,0,1-1.4125,0L4.293,7.716A.9945.9945,0,0,1,4,7.01Z"/>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 18 18" width="18">
+        <path fill="#ffffff"
+              d="M4,7.01a1,1,0,0,1,1.7055-.7055l3.289,3.286,3.289-3.286a1,1,0,0,1,1.437,1.3865l-.0245.0245L9.7,11.7075a1,1,0,0,1-1.4125,0L4.293,7.716A.9945.9945,0,0,1,4,7.01Z"/>
+    </svg>
+</div>
+
+<div id="bottom-menu">
+    <a href="#" class="about">About This Page</a><a href="/docs/resume.pdf" download>Resumé</a>
+</div>
+
+<script type="module" src="/main.js"></script>
+</body>
 </html>

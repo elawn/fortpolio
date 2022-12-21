@@ -1,6 +1,7 @@
 import Experience from '../Experience'
 import { Box3, Object3D } from 'three'
 import Text from './Text'
+import About from './About'
 
 export default class World {
     constructor() {
@@ -61,6 +62,8 @@ export default class World {
                 hoverColor: '#cccccc'
             }
         ] )
+
+        new About()
     }
 
     onLoad() {
