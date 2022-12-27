@@ -60,10 +60,10 @@ export default class Text {
 
             const charShape = new Convex( {
                 vertices: [
-                    [ min.x + 0.0011, max.y ], // tweak to imitate font slant
-                    [ min.x, min.y ],
-                    [ max.x - 0.0011, min.y ], // tweak to imitate font slant
-                    [ max.x, max.y ]
+                    [ min.x + 0.0011, max.y - this.yOffset * 0.75 ], // tweak to imitate font slant
+                    [ min.x, min.y - this.yOffset * 0.75 ],
+                    [ max.x - 0.0011, min.y - this.yOffset * 0.75 ], // tweak to imitate font slant
+                    [ max.x, max.y - this.yOffset * 0.75 ]
                 ]
             } )
             charShape.material = this.exp.phys.charMaterial
