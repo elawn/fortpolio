@@ -14,7 +14,7 @@ export default class Scroller extends EventEmitter {
             this.showBox = true
         }, 8000 )
 
-        this.handleScroll()
+        window.addEventListener( 'scroll', () => this.handleScroll() )
     }
 
     set showBox( val ) {
@@ -26,23 +26,21 @@ export default class Scroller extends EventEmitter {
     }
 
     handleScroll() {
-        window.addEventListener( 'scroll', () => {
-            this.showBox = false
-            clearTimeout( this.showTimeout )
+        this.showBox = false
+        clearTimeout( this.showTimeout )
+        if ( !this.killBox ) {
+            this.showTimeout = setTimeout( () => {
+                this.showBox = true
+            }, 5000 )
+        }
+        this.showMenu = ( window.scrollY > document.body.clientHeight - window.innerHeight - 150 )
+        const newSect = Math.round( window.scrollY / this.exp.sizes.height )
+        if ( newSect !== this.currentSect ) {
+            this.currentSect = newSect
+            this.trigger( 'newSect', [ this.currentSect ] )
             if ( !this.killBox ) {
-                this.showTimeout = setTimeout( () => {
-                    this.showBox = true
-                }, 5000 )
+                this.killBox = ( newSect === this.maxSect )
             }
-            this.showMenu = ( window.scrollY > document.body.clientHeight - window.innerHeight - 150 )
-            const newSect = Math.round( window.scrollY / this.exp.sizes.height )
-            if ( newSect !== this.currentSect ) {
-                this.currentSect = newSect
-                this.trigger( 'newSect', [ this.currentSect ] )
-                if ( !this.killBox ) {
-                    this.killBox = ( newSect === this.maxSect )
-                }
-            }
-        } )
+        }
     }
 }

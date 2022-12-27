@@ -1,4 +1,5 @@
 import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Experience from './Experience'
 import { PerspectiveCamera } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -11,20 +12,22 @@ export default class Camera {
         this.sizes = this.exp.sizes
         this.scene = this.exp.scene
         this.cvs = this.exp.cvs
+        this.touchstartY = null
+        this.touchAnimating = false
 
         this.baseY = -1.92119
 
         this.setInstance()
         this.setControls()
 
-        if (this.exp.debug) {
+        if ( this.exp.debug ) {
             this.gui = this.exp.gui
             this.guiFolder = null
             this.setupDebug()
         }
     }
 
-    get currY () {
+    get currY() {
         return ( -window.scrollY / this.exp.sizes.height * this.sizes.objsDist ) + this.baseY
     }
 
@@ -70,6 +73,39 @@ export default class Camera {
             },
             x: 2,
             z: 16.5
+        } )
+
+        this.handleTouch()
+    }
+
+    handleTouch() {
+        window.addEventListener( 'touchstart', ( { touches: { 0: { clientY } } } ) => {
+            this.touchstartY = clientY
+        } )
+
+        window.addEventListener( 'touchmove', ( { touches: { 0: { clientY } } } ) => {
+            if ( this.touchstartY !== null && !this.touchAnimating && Math.abs( this.touchstartY - clientY ) > 50 ) {
+                const scrollFactor = this.touchstartY - clientY > 0 ? 1 : -1
+                if ( ( scrollFactor === -1 && this.exp.scroller.currentSect > 0 ) || ( scrollFactor === 1 && this.exp.scroller.currentSect < this.exp.scroller.maxSect ) ) {
+                    this.touchAnimating = true
+                    gsap.to( window, {
+                        scrollY: `+=${ window.innerHeight * scrollFactor }`,
+                        duration: 1.5,
+                        ease: 'power2.inOut',
+                        onUpdate: () => {
+                            this.exp.scroller.handleScroll()
+                            ScrollTrigger.update()
+                        },
+                        onComplete: () => {
+                            this.touchAnimating = false
+                        }
+                    } )
+                }
+            }
+        } )
+
+        window.addEventListener( 'touchend', () => {
+            this.touchstartY = null
         } )
     }
 
