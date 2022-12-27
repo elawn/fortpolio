@@ -56,7 +56,7 @@ export default class Link {
             0xffffff,
             0,
             5,
-            0.14,
+            this.exp.sizes.isVert ? 0.25 : 0.14,
             0,
             0.5
         )
