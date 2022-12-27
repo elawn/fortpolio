@@ -18,9 +18,16 @@ export default class About {
         window.addEventListener( 'keydown', ( { key } ) => {
             if ( key === 'Escape' ) this.close()
         } )
+
+        this.window.querySelector( '#num-years' ).innerHTML = this.getYears()
     }
 
     close() {
         this.window.classList.remove( 'active' )
+    }
+
+    getYears() {
+        const startDate = new Date( '1/1/2014' )
+        return Math.floor( ( Date.now() - startDate ) / 1000 / 60 / 60 / 24 / 365 )
     }
 }
