@@ -19,17 +19,8 @@ export default class Experience {
         instance = this
 
         // debug
-        this.gui = new dat.GUI()
-        this.debugObj = {
-            matcap: 5
-        }
-        this.gui
-            .add( this.debugObj, 'matcap', Array( 9 ).fill( 0 ).map( ( _, idx ) => idx + 1 ) )
-            .onChange( value => this.updateMatcaps( value ) )
-        this.gui.close()
-        this.stats = new Stats()
-        this.stats.showPanel( 0 )
-        document.body.appendChild( this.stats.dom )
+        this.debug = false
+        if (import.meta.env.MODE === 'development') this.setupDebug()
 
         // setup
         this.cvs = cvs
@@ -58,6 +49,21 @@ export default class Experience {
 
         DefaultLoadingManager.onProgress = ( _, loaded, total ) => this.onProgress( loaded, total )
         DefaultLoadingManager.onLoad = () => this.onLoad()
+    }
+
+    setupDebug() {
+        this.debug = true
+        this.gui = new dat.GUI()
+        this.debugObj = {
+            matcap: 5
+        }
+        this.gui
+            .add( this.debugObj, 'matcap', Array( 9 ).fill( 0 ).map( ( _, idx ) => idx + 1 ) )
+            .onChange( value => this.updateMatcaps( value ) )
+        this.gui.close()
+        this.stats = new Stats()
+        this.stats.showPanel( 0 )
+        document.body.appendChild( this.stats.dom )
     }
 
     onProgress( loaded, total ) {

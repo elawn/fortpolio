@@ -14,12 +14,14 @@ export default class Camera {
 
         this.baseY = -1.92119
 
-        this.gui = this.exp.gui
-        this.guiFolder = null
         this.setInstance()
         this.setControls()
 
-        this.setupDebug()
+        if (this.exp.debug) {
+            this.gui = this.exp.gui
+            this.guiFolder = null
+            this.setupDebug()
+        }
     }
 
     get currY () {
@@ -77,6 +79,6 @@ export default class Camera {
         } else {
             this.instance.position.y = this.currY
         }
-        if ( this.guiFolder ) this.guiFolder.controllers.forEach( ctl => ctl.updateDisplay() )
+        if ( this.exp.debug ) this.guiFolder.controllers.forEach( ctl => ctl.updateDisplay() )
     }
 }
