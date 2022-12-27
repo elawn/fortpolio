@@ -20,7 +20,7 @@ export default class Experience {
 
         // debug
         this.debug = false
-        if (import.meta.env.MODE === 'development') this.setupDebug()
+        if ( import.meta.env.MODE === 'development' ) this.setupDebug()
 
         // setup
         this.cvs = cvs
@@ -85,7 +85,7 @@ export default class Experience {
     }
 
     update() {
-        this.stats.begin()
+        if ( this.debug ) this.stats.begin()
 
         this.cam.update()
         this.cursor.update()
@@ -93,7 +93,7 @@ export default class Experience {
         this.phys.update()
         this.renderer.update()
 
-        this.stats.end()
+        if ( this.debug ) this.stats.end()
     }
 
     updateMatcaps( newVal ) {
