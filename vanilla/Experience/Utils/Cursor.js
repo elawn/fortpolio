@@ -21,7 +21,16 @@ export default class Cursor extends EventEmitter {
         } )
 
         window.addEventListener( 'click', () => {
-            if ( this.intersects.length ) this.trigger( 'click', [this.intersects] )
+            if ( this.exp.sizes.isVert ) {
+                setTimeout( () => {
+                    if ( this.intersects.length ) {
+                        this.trigger( 'click', [ this.intersects ] )
+                        this.intersects = []
+                    }
+                }, 100 )
+            } else {
+                if ( this.intersects.length ) this.trigger( 'click', [ this.intersects ] )
+            }
         } )
     }
 
