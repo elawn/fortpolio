@@ -98,6 +98,9 @@ export default class Camera {
                         },
                         onComplete: () => {
                             this.touchAnimating = false
+                            if ( this.exp.scroller.currentSect === this.exp.scroller.maxSect ) {
+                                this.exp.scroller.showMenu = true
+                            }
                         }
                     } )
                 }
