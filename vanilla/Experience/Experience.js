@@ -10,6 +10,7 @@ import { textureLoader } from './Utils/Loaders'
 import Cursor from './Utils/Cursor'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import Physics from './Utils/Physics'
+import Router from './Utils/Router'
 
 let instance = null
 
@@ -24,6 +25,7 @@ export default class Experience {
 
         // setup
         this.cvs = cvs
+        this.router = new Router()
         this.sizes = new Sizes()
         this.time = new Time()
         this.phys = new Physics()

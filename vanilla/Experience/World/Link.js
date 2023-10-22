@@ -7,6 +7,7 @@ const LINK_LIGHT_INTENSITY = 9
 export default class Link {
     constructor( link, children, mat ) {
         this.exp = new Experience()
+        this.router = this.exp.router
         this.cursor = this.exp.cursor
         this.link = link
         this.children = children
@@ -77,7 +78,7 @@ export default class Link {
 
         this.cursor.on( 'click', ( i ) => {
             if ( this.children[ 0 ].material.opacity !== 1 ) return
-            if ( i[ 0 ].object.name === `${ this.link.key }_linkbox` ) window.open( this.link.url, '_blank' )
+            if (i[0].object.name === `${this.link.key}_linkbox`) this.router.to(this.link.url)
         } )
     }
 
