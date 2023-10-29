@@ -6,6 +6,8 @@ export default class Router extends EventEmitter {
         super()
         this.exp = new Experience()
         this.state = history.state || { page: 'home' }
+        this.waybackModal = document.querySelector('#wayback-modal')
+        this.waybackBtn = this.waybackModal.querySelector('a')
 
         window.addEventListener('popstate', ({state}) => this.handlePopState(state))
     }
@@ -15,7 +17,17 @@ export default class Router extends EventEmitter {
         this.trigger('pageChange', [state.page])
     }
 
+    handleWaybackModal(url) {
+        this.waybackModal.classList.add('show')
+        this.waybackBtn.href = url
+        // TODO: add modal close handlers
+    }
+
     to(dest) {
+        if (dest.includes('web.archive.org')) {
+            this.handleWaybackModal()
+            return
+        }
         if (dest.startsWith('http')) {
             window.open(dest, '_blank')
             return
