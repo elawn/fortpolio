@@ -2,10 +2,12 @@ import Experience from '../Experience'
 import { Box3, Object3D } from 'three'
 import Text from './Text'
 import About from './About'
+import Curtain from './Curtain'
 
 export default class World {
     constructor() {
         this.exp = new Experience()
+        this.curtain = new Curtain()
         this.scene = this.exp.scene
         this.cam = this.exp.cam.instance
         this.sizes = this.exp.sizes

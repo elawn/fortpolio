@@ -28,7 +28,7 @@ export default class Router extends EventEmitter {
             this.handleWaybackModal()
             return
         }
-        if (dest.startsWith('http')) {
+        if (['http', 'mailto:'].some(s => dest.startsWith(s))) {
             window.open(dest, '_blank')
             return
         }
